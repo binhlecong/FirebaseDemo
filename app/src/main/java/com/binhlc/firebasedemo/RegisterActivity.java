@@ -1,8 +1,8 @@
 package com.binhlc.firebasedemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,21 +33,18 @@ public class RegisterActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
+        btnRegister.setOnClickListener(v -> {
+            String email = etEmail.getText().toString();
+            String password = etPassword.getText().toString();
 
-                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                    Toast.makeText(RegisterActivity.this, "Empty email or password",
-                            Toast.LENGTH_SHORT).show();
-                } else if (password.length() < 4) {
-                    Toast.makeText(RegisterActivity.this, "Password too short",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    registerUser(email, password);
-                }
+            if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                Toast.makeText(RegisterActivity.this, "Empty email or password",
+                        Toast.LENGTH_SHORT).show();
+            } else if (password.length() < 4) {
+                Toast.makeText(RegisterActivity.this, "Password too short",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                registerUser(email, password);
             }
         });
     }
@@ -59,8 +56,10 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Registering user successful",
+                            Toast.makeText(RegisterActivity.this, "Registering User successful",
                                     Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            finish();
                         } else {
                             Toast.makeText(RegisterActivity.this, "Registering user failed",
                                     Toast.LENGTH_SHORT).show();

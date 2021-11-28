@@ -20,12 +20,10 @@ public class StartActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> {
             startActivity(new Intent(StartActivity.this, LoginActivity.class));
-            finish();
         });
 
         btnRegister.setOnClickListener(v -> {
             startActivity(new Intent(StartActivity.this, RegisterActivity.class));
-            finish();
         });
     }
 }
