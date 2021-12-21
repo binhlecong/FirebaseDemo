@@ -12,14 +12,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
@@ -87,5 +92,22 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Not yet implemented", Toast.LENGTH_SHORT);
             }
         });
+
+        // FirebaseFirestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> city = new HashMap<>();
+        city.put("name", "Ho Chi Minh");
+        city.put("country", "Viet Nam");
+
+        db.collection("cities").document("HCM").set(city)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Data updated to Firestore",
+                                    Toast.LENGTH_SHORT);
+                        }
+                    }
+                });
     }
 }
