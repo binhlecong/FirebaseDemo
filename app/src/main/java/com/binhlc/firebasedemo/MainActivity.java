@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
@@ -25,5 +26,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, StartActivity.class));
             finish();
         });
+
+        FirebaseDatabase.getInstance().getReference().child("Binh's Firebase demo").child(
+                "Android").setValue("Today is 21st of December");
     }
 }
