@@ -12,19 +12,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
@@ -93,21 +90,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // FirebaseFirestore
+        // Set data to document
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> city = new HashMap<>();
-        city.put("name", "Ho Chi Minh");
-        city.put("country", "Viet Nam");
+//        Map<String, Object> city = new HashMap<>();
+//        city.put("name", "Ho Chi Minh");
+//        city.put("country", "Viet Nam");
+//
+//        db.collection("cities").document("HCM").set(city)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(MainActivity.this, "Data updated to Firestore",
+//                                    Toast.LENGTH_SHORT);
+//                        }
+//                    }
+//                });
 
-        db.collection("cities").document("HCM").set(city)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Data updated to Firestore",
-                                    Toast.LENGTH_SHORT);
-                        }
-                    }
-                });
+
+        // Merge data
+//        Map<String, Object> data = new HashMap<>();
+//        data.put("capital", false);
+//        db.collection("cities").document("HCM").set(data, SetOptions.merge())
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(MainActivity.this, "Data updated to Firestore",
+//                                    Toast.LENGTH_SHORT);
+//                        }
+//                    }
+//                });
+//
+//        // Add data
+//        Map<String, Object> city = new HashMap<>();
+//        city.put("name", "Tokyo");
+//        city.put("country", "Japan");
+//        city.put("capital", true);
+//
+//        db.collection("cities").add(city)
+//                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentReference> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(MainActivity.this, "Data updated to Firestore",
+//                                    Toast.LENGTH_SHORT);
+//                        }
+//                    }
+//                });
+
+        // Update data
+        DocumentReference ref = FirebaseFirestore.getInstance().collection("cities").document(
+                "HCM");
+        ref.update("capital", true);
     }
 }
+
+// TODO: current process tutorial 6
