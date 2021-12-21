@@ -3,19 +3,29 @@ package com.binhlc.firebasedemo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnLogout;
     private Button btnSubmit;
     private EditText etInput;
+    private ListView lvFirebasedata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btn_logout);
         btnSubmit = findViewById(R.id.btn_submit);
         etInput = findViewById(R.id.et_input);
+        lvFirebasedata = findViewById(R.id.lv_firebasedata);
 
         btnLogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -52,6 +63,28 @@ public class MainActivity extends AppCompatActivity {
                     FirebaseDatabase.getInstance().getReference()
                             .child("FirebaseDemo").push().child("Name").setValue(inputText);
                 }
+            }
+        });
+
+        ArrayList<String> list = new ArrayList<>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.list_item, list);
+        lvFirebasedata.setAdapter(adapter);
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(
+                "FirebaseDemo");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                list.clear();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    list.add(snapshot1.getValue(Person.class).getName());
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
